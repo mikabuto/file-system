@@ -17,28 +17,9 @@ const Wrapper = styled.div`
 `;
 
 export const FileSystem = observer(() => {
-  const folderTree = store.fileSystem;
-  // const defaultFolderTree: TFileSystem = [
-  //   {
-  //     folderId: uuidv4(),
-  //     folderName: "folder1",
-  //     children: [{ fileId: uuidv4(), fileName: "file1" }],
-  //   },
-  //   {
-  //     folderId: uuidv4(),
-  //     folderName: "folder2",
-  //     children: [{ folderId: uuidv4(), folderName: "folder2_1", children: [] }],
-  //   },
-  //   {
-  //     fileId: uuidv4(),
-  //     fileName: "file2",
-  //   },
-  // ];
-  // const [folderTree, setFolderTree] = useState<Array<TFolder | TFile> | null>(
-  //   defaultFolderTree
-  // );
-
   return (
-    <Wrapper>{folderTree && <List folderTree={folderTree} tab={0} />}</Wrapper>
+    <Wrapper>
+      {store.fileSystem && <List folderTree={store.fileSystem} tab={0} />}
+    </Wrapper>
   );
 });

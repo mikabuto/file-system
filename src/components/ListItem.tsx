@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import FolderIcon from "@mui/icons-material/Folder";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -7,8 +7,22 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ArrowDropDown } from "@mui/icons-material";
 import store from "../store/store";
+import { TFile, TFolder } from "../constants/types";
+import { generateFile } from "../utils/generateFile";
+import { observer } from "mobx-react-lite";
+import { removeNode } from "../utils/removeNode";
+import { RemoveNodeModal } from "../modals/RemoveNodeModal";
+import { Box, Modal } from "@mui/material";
+import { showPath } from "../utils/showPath";
+import { AddNodeModal } from "../modals/AddNodeModal";
+import { AddDropdown } from "./AddDropdown";
 
-const Wrapper = styled.div<{ isFolder?: boolean }>`
+interface IWrapperProps {
+  isFolder?: boolean;
+  showAddDropdown: boolean;
+}
+
+const Wrapper = styled.div<IWrapperProps>`
   display: flex;
   padding: 8px 4px;
   border-radius: 3px;
@@ -30,7 +44,17 @@ const Wrapper = styled.div<{ isFolder?: boolean }>`
   }
 
   &:hover .hover-icons {
-    display: ${(props) => (props.isFolder ? "flex" : "none")};
+    display: flex;
+  }
+
+  .add-icon {
+    display: ${(props) =>
+      props.isFolder || props.showAddDropdown ? "flex" : "none"};
+  }
+
+  &:hover .add-icon {
+    display: ${(props) =>
+      props.isFolder || props.showAddDropdown ? "flex" : "none"};
   }
 
   .title {
@@ -42,15 +66,25 @@ const Wrapper = styled.div<{ isFolder?: boolean }>`
   }
 `;
 
+enum EShowAddModal {
+  "notShown",
+  "Sequence",
+  "Folder",
+}
+
 export const ListItem: React.FC<{
-  title: string;
-  id: string;
+  node: TFolder | TFile;
   isFolder?: boolean;
   showChildren?: boolean;
   onArrowClick?: (show: boolean) => void;
-}> = ({ isFolder, title, id, showChildren, onArrowClick }) => {
+}> = observer(({ isFolder, node, showChildren, onArrowClick }) => {
+  const nodeId = isFolder ? (node as TFolder).folderId : (node as TFile).fileId;
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [showAddDropdown, setShowAddDropdown] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(EShowAddModal.notShown);
+
   return (
-    <Wrapper isFolder={isFolder}>
+    <Wrapper isFolder={isFolder} showAddDropdown={showAddDropdown}>
       {isFolder ? (
         <>
           {showChildren ? (
@@ -71,19 +105,72 @@ export const ListItem: React.FC<{
       ) : (
         <MovieCreationOutlinedIcon fontSize="small" />
       )}
-      <div className="title">{title}</div>
+      <div className="title">
+        {isFolder ? (node as TFolder).folderName : (node as TFile).fileName}
+      </div>
       <div className="hover-icons">
         <AddBoxIcon
-          className="clickable-icon"
+          className="clickable-icon add-icon"
           fontSize="small"
-          onClick={() => store.addItem(id, "recuursiooon", false)}
+          onClick={() => {
+            setShowAddDropdown(true);
+          }}
         />
+        {showAddDropdown && (
+          <AddDropdown
+            onNodeTypeClick={(nodeType: "sequence" | "folder") =>
+              setShowAddModal(
+                nodeType === "sequence"
+                  ? EShowAddModal.Sequence
+                  : EShowAddModal.Folder
+              )
+            }
+          />
+        )}
         <DeleteIcon
           className="clickable-icon"
           fontSize="small"
-          onClick={() => console.log("delete")}
+          onClick={() => setShowRemoveModal(true)}
         />
       </div>
+      {/* {showDeleteModal && <RemoveNodeModal />} */}
+      <Modal
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        open={showRemoveModal}
+        onClose={() => setShowRemoveModal(false)}
+      >
+        <RemoveNodeModal
+          path={showPath(nodeId)}
+          isFolder={isFolder}
+          onCancel={() => setShowRemoveModal(false)}
+          onRemove={() => {
+            removeNode(store.fileSystem, nodeId);
+            setShowRemoveModal(false);
+          }}
+        />
+      </Modal>
+      <Modal
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        open={!!showAddModal}
+        onClose={() => setShowAddModal(EShowAddModal.notShown)}
+      >
+        <AddNodeModal
+          parentFolderName="name"
+          isFolder={isFolder}
+          onCancel={() => setShowAddModal(EShowAddModal.notShown)}
+          onAdd={(newNodeName) => {
+            setShowAddModal(EShowAddModal.notShown);
+          }}
+        />
+      </Modal>
     </Wrapper>
   );
-};
+});
