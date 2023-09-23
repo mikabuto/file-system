@@ -14,7 +14,9 @@ export const FolderNode: React.FC<{ tab: number; node: TFolder }> = observer(
           <ListItem
             node={node}
             showChildren={showChildren}
-            onArrowClick={(show: boolean) => setShowChildren(show)}
+            onArrowClick={(show: boolean) => {
+              setShowChildren(show);
+            }}
             isFolder
           />
         </div>

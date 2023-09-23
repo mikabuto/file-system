@@ -66,16 +66,10 @@ class Store {
       : { fileId: uuidv4(), fileName: newName };
 
     const dfs = (tree: TFolder | TFile) => {
-      console.log(
-        "dfs",
-        (tree as TFolder).folderName,
-        (tree as TFile).fileName
-      );
       if (!isNodeFolder(tree)) {
         return;
       }
       if (parentFolderId === tree.folderId) {
-        console.log("found parent!", parentFolderId, tree);
         tree.children.push(newNode);
         return;
       }

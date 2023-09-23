@@ -6,7 +6,6 @@ const checkId = (node: TFile | TFolder, removeNodeId: string) =>
 
 export const removeNode = (fileSystem: TFileSystem, removeNodeId: string) => {
   const dfs = (tree: TFolder | TFile) => {
-    console.log("dfs", (tree as TFolder).folderName, (tree as TFile).fileName);
     const foundIndex = isNodeFolder(tree)
       ? tree.children.findIndex((node) => checkId(node, removeNodeId))
       : -2;
@@ -16,13 +15,6 @@ export const removeNode = (fileSystem: TFileSystem, removeNodeId: string) => {
     } else if (foundIndex === -2) {
       return;
     } else if (isNodeFolder(tree)) {
-      console.log(
-        "found parent! deleting from folder ",
-        tree.folderName,
-        " file/folder",
-        (tree.children[foundIndex] as TFile).fileName ||
-          (tree.children[foundIndex] as TFolder).folderName
-      );
       tree.children.splice(foundIndex, 1);
     }
   };
@@ -33,5 +25,7 @@ export const removeNode = (fileSystem: TFileSystem, removeNodeId: string) => {
 
   if (foundIndex === -1) {
     fileSystem.forEach(dfs);
+  } else {
+    fileSystem.splice(foundIndex, 1);
   }
 };

@@ -29,6 +29,5 @@ export const showPath = (nodeId: string) => {
   };
 
   store.fileSystem.forEach((node) => dfs(node, `Project${getNodeName(node)}`));
-  console.log(path);
   return path;
 };

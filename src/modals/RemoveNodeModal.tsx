@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "styled-components";
 import { Button } from "@mui/material";
+import { showPath } from "../utils/showPath";
 
 const Wrapper = styled.div`
   width: 524px;
@@ -30,23 +31,34 @@ const Wrapper = styled.div`
 `;
 
 type TProps = {
-  path: string;
+  nodeId: string;
   isFolder?: boolean;
   onCancel: () => void;
   onRemove: () => void;
 };
 
 export const RemoveNodeModal: React.FC<TProps> = ({
-  path,
+  nodeId,
   isFolder,
   onCancel,
   onRemove,
 }) => {
+  useEffect(() => {
+    function handleEnterKey(event: KeyboardEvent) {
+      if (event.code === "Enter") {
+        onRemove();
+      }
+    }
+
+    document.addEventListener("keydown", handleEnterKey);
+    return () => document.removeEventListener("keydown", handleEnterKey);
+  }, [onRemove]);
+
   return (
     <Wrapper>
       <DeleteIcon sx={{ fontSize: 80, color: "#DB5C5C" }} />
       <div className="text-wrapper">
-        <div style={{ fontWeight: 800 }}>{path}</div>
+        <div style={{ fontWeight: 800 }}>{showPath(nodeId)}</div>
         <div>
           Are you sure you want to delete this{" "}
           {isFolder ? "Folder" : "Sequence"}?
