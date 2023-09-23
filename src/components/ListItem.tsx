@@ -63,6 +63,8 @@ const Wrapper = styled.div<IWrapperProps>`
 
   .title {
     margin-left: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .clickable-icon:hover {
