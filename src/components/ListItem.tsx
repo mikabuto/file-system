@@ -3,7 +3,6 @@ import styled from "styled-components";
 import FolderIcon from "@mui/icons-material/Folder";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import MovieCreationOutlinedIcon from "@mui/icons-material/MovieCreationOutlined";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ArrowDropDown } from "@mui/icons-material";
 import store from "../store/store";
@@ -12,12 +11,7 @@ import { observer } from "mobx-react-lite";
 import { removeNode } from "../utils/removeNode";
 import { RemoveNodeModal } from "../modals/RemoveNodeModal";
 import { Modal } from "@mui/material";
-import { AddNodeModal } from "../modals/AddNodeModal";
-import { AddDropdown } from "./AddDropdown";
-import { ENodeTypes } from "../constants/enums";
-import { addNode } from "../utils/addNode";
 import { isNodeFolder } from "../utils/isNodeFolder";
-import { useClickOutside } from "../hooks/useClickOutside";
 import { AddButton } from "./AddButton";
 
 interface IWrapperProps {
@@ -146,34 +140,6 @@ export const ListItem: React.FC<{
           />
         </Modal>
       )}
-      {/* <Modal
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        open={!!showAddModal}
-        onClose={() => setShowAddModal(null)}
-      >
-        <AddNodeModal
-          parentFolderName={showAddModal?.parent.folderName || ""}
-          isFolder={showAddModal?.newNodeType === ENodeTypes.Folder}
-          onCancel={() => setShowAddModal(null)}
-          onAdd={(newNodeName) => {
-            if (showAddModal && isNodeFolder(showAddModal.parent)) {
-              addNode(
-                showAddModal.parent,
-                newNodeName,
-                showAddModal.newNodeType
-              );
-              if (onArrowClick) {
-                onArrowClick(true);
-              }
-            }
-            setShowAddModal(null);
-          }}
-        />
-      </Modal> */}
     </Wrapper>
   );
 });

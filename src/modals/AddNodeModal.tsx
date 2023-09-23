@@ -5,7 +5,6 @@ import FolderIcon from "@mui/icons-material/Folder";
 import MovieCreationOutlinedIcon from "@mui/icons-material/MovieCreationOutlined";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import CloseIcon from "@mui/icons-material/Close";
 import { Close } from "@mui/icons-material";
 
 const Wrapper = styled.div`

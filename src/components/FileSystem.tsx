@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { TFile, TFileSystem, TFolder } from "../constants/types";
-import { v4 as uuidv4 } from "uuid";
-import { isNodeFolder } from "../utils/isNodeFolder";
 import { List } from "./List";
 import store from "../store/store";
 import { observer } from "mobx-react-lite";
-import { AddDropdown } from "./AddDropdown";
 import { addNode } from "../utils/addNode";
 import { ENodeTypes } from "../constants/enums";
 import AddBoxIcon from "@mui/icons-material/AddBox";

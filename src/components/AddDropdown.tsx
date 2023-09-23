@@ -1,9 +1,8 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ENodeTypes } from "../constants/enums";
 import MovieCreationOutlinedIcon from "@mui/icons-material/MovieCreationOutlined";
 import FolderIcon from "@mui/icons-material/Folder";
-import { useClickOutside } from "../hooks/useClickOutside";
 
 const Wrapper = styled.div`
   position: absolute;

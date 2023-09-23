@@ -24,7 +24,6 @@ const Wrapper = styled.div`
     align-items: center;
   }
   .buttons {
-    /* width: 100%; */
     display: flex;
     gap: 12px;
   }
